@@ -12,17 +12,31 @@ class AuthController extends Controller
     // Acción para el login
     public function login(Request $request)
     {
+        // Validación de los datos del formulario de inicio de sesión
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        // Intento de autenticación
         if (Auth::attempt($request->only('email', 'password'))) {
+            // Usuario autenticado
             $user = Auth::user();
-            $token = $user->createToken('api-token')->plainTextToken;
-            return response()->json(['token' => $token], 200);
+
+            // Generación del token de acceso con una duración de 15 minutos (900 segundos)
+            $accessToken =  $user->createToken('api-token', ['expiration' => now()->addMinutes(15)])->plainTextToken;
+
+            $refreshToken = $user->createToken('refresh-token', ['expiration' => now()->addDays(7)])->plainTextToken;
+
+            // Retornar la respuesta con el token de acceso
+            return response()->json([
+                'access_token' => $accessToken,
+                'refresh_token' => $refreshToken,
+                'token_type' => 'Bearer',
+            ], 200);
         }
 
+        // Error de autenticación
         return response()->json(['message' => 'Credenciales incorrectas'], 401);
     }
 
@@ -41,15 +55,51 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('api-token')->plainTextToken;
-        return response()->json(['token' => $token], 201);
+        // Generación del token de acceso con una duración de 15 minutos (900 segundos)
+        $accessToken =  $user->createToken('api-token', ['expiration' => now()->addMinutes(15)])->plainTextToken;
+
+        $refreshToken = $user->createToken('refresh-token', ['expiration' => now()->addDays(7)])->plainTextToken;
+
+        // Retornar la respuesta con el token de acceso
+        return response()->json([
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+            'token_type' => 'Bearer',
+        ], 200);
+    }
+
+    // Acción para refrescar el token de acceso
+    public function refreshToken(Request $request)
+    {
+        $request->validate([
+            'refresh_token' => 'required'
+        ]);
+
+        $token = $request->user()->tokens()->where('id', $request->refresh_token)->first();
+
+        if (!$token) {
+            return response()->json(['message' => 'Token de actualización inválido'], 401);
+        }
+
+        $user = $request->user();
+        $user->tokens()->where('id', $request->refresh_token)->first()->delete();
+
+        // Generación del token de acceso con una duración de 15 minutos (900 segundos)
+        $accessToken =  $user->createToken('api-token', ['expiration' => now()->addMinutes(15)])->plainTextToken;
+        $refreshToken = $user->createToken('refresh-token', ['expiration' => now()->addDays(7)])->plainTextToken;
+        // Retornar la respuesta con el token de acceso
+        return response()->json([
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+            'token_type' => 'Bearer',
+        ], 200);
     }
 
     // Acción para cerrar sesión
     public function logout(Request $request)
     {
+        $request->user()->tokens()->delete();
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Sesión cerrada'], 200);
     }
 }
-

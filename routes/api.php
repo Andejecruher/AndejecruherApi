@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ArticuloController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\EmailsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +30,8 @@ Route::post(
     '/register',
     [AuthController::class, 'register']
 )->name('register');
-
+// Ruta para refrescar el token de acceso
+Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middleware('auth:sanctum');
 // Ruta para cerrar sesión
 Route::post(
     '/logout',
@@ -35,3 +41,38 @@ Route::post(
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['prefix' => 'articulos'], function () {
+    Route::get('/', [ArticuloController::class, 'index']);
+    Route::get('/{id}', [ArticuloController::class, 'show']);
+    Route::post('/', [ArticuloController::class, 'store']);
+    Route::put('/{id}', [ArticuloController::class, 'update']);
+    Route::delete('/{id}', [ArticuloController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'tags'], function () {
+    Route::get('/', [TagController::class, 'index']);
+    Route::get('/{id}', [TagController::class, 'show']);
+    Route::post('/', [TagController::class, 'store']);
+    Route::put('/{id}', [TagController::class, 'update']);
+    Route::delete('/{id}', [TagController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'comentarios'], function () {
+    Route::get('/', [ComentarioController::class, 'index']);
+    Route::get('/{id}', [ComentarioController::class, 'show']);
+    Route::post('/', [ComentarioController::class, 'store']);
+    Route::put('/{id}', [ComentarioController::class, 'update']);
+    Route::delete('/{id}', [ComentarioController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'categorias'], function () {
+    Route::get('/', [CategoriaController::class, 'index']);
+    Route::get('/{id}', [CategoriaController::class, 'show']);
+    Route::post('/', [CategoriaController::class, 'store']);
+    Route::put('/{id}', [CategoriaController::class, 'update']);
+    Route::delete('/{id}', [CategoriaController::class, 'destroy']);
+});
+
+Route::post('/enviar-mensaje',[EmailsController::class, 'enviarMensaje'])->name('enviar-mensaje')->middleware('guest');
+

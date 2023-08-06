@@ -1,0 +1,258 @@
+{
+    "info": {
+      "_postman_id": "d9c92ba7-224f-47c8-8f9c-09f2cfd0ff1a",
+      "name": "Blog API",
+      "description": "Colección de pruebas para el API del Blog",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Usuarios",
+        "item": [
+          {
+            "name": "Listar todos los usuarios",
+            "request": {
+              "url": "{{base_url}}/users",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Mostrar un usuario específico",
+            "request": {
+              "url": "{{base_url}}/users/{id}",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Crear un nuevo usuario",
+            "request": {
+              "url": "{{base_url}}/users",
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Nombre del Usuario\",\n  \"email\": \"usuario@example.com\",\n  \"password\": \"contrasena\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Actualizar un usuario",
+            "request": {
+              "url": "{{base_url}}/users/{id}",
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Nuevo Nombre\",\n  \"email\": \"nuevo@example.com\",\n  \"password\": \"nueva_contrasena\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Eliminar un usuario",
+            "request": {
+              "url": "{{base_url}}/users/{id}",
+              "method": "DELETE"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Artículos",
+        "item": [
+          {
+            "name": "Listar todos los artículos",
+            "request": {
+              "url": "{{base_url}}/articulos",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Mostrar un artículo específico",
+            "request": {
+              "url": "{{base_url}}/articulos/{id}",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Crear un nuevo artículo",
+            "request": {
+              "url": "{{base_url}}/articulos",
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"titulo\": \"Título del Artículo\",\n  \"contenido\": \"Contenido del artículo\",\n  \"tags\": [1, 2, 3]\n}"
+              }
+            }
+          },
+          {
+            "name": "Actualizar un artículo",
+            "request": {
+              "url": "{{base_url}}/articulos/{id}",
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"titulo\": \"Nuevo Título\",\n  \"contenido\": \"Nuevo contenido del artículo\",\n  \"tags\": [4, 5]\n}"
+              }
+            }
+          },
+          {
+            "name": "Eliminar un artículo",
+            "request": {
+              "url": "{{base_url}}/articulos/{id}",
+              "method": "DELETE"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Etiquetas",
+        "item": [
+          {
+            "name": "Listar todas las etiquetas",
+            "request": {
+              "url": "{{base_url}}/tags",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Mostrar una etiqueta específica",
+            "request": {
+              "url": "{{base_url}}/tags/{id}",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Crear una nueva etiqueta",
+            "request": {
+              "url": "{{base_url}}/tags",
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nombre\": \"Etiqueta Nueva\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Actualizar una etiqueta",
+            "request": {
+              "url": "{{base_url}}/tags/{id}",
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nombre\": \"Nueva Etiqueta\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Eliminar una etiqueta",
+            "request": {
+              "url": "{{base_url}}/tags/{id}",
+              "method": "DELETE"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Comentarios",
+        "item": [
+          {
+            "name": "Listar todos los comentarios",
+            "request": {
+              "url": "{{base_url}}/comentarios",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Mostrar un comentario específico",
+            "request": {
+              "url": "{{base_url}}/comentarios/{id}",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Crear un nuevo comentario",
+            "request": {
+              "url": "{{base_url}}/comentarios",
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"contenido\": \"Contenido del comentario\",\n  \"articulo_id\": 1\n}"
+              }
+            }
+          },
+          {
+            "name": "Actualizar un comentario",
+            "request": {
+              "url": "{{base_url}}/comentarios/{id}",
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"contenido\": \"Nuevo contenido del comentario\",\n  \"articulo_id\": 2\n}"
+              }
+            }
+          },
+          {
+            "name": "Eliminar un comentario",
+            "request": {
+              "url": "{{base_url}}/comentarios/{id}",
+              "method": "DELETE"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Categorías",
+        "item": [
+          {
+            "name": "Listar todas las categorías",
+            "request": {
+              "url": "{{base_url}}/categorias",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Mostrar una categoría específica",
+            "request": {
+              "url": "{{base_url}}/categorias/{id}",
+              "method": "GET"
+            }
+          },
+          {
+            "name": "Crear una nueva categoría",
+            "request": {
+              "url": "{{base_url}}/categorias",
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nombre\": \"Categoría Nueva\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Actualizar una categoría",
+            "request": {
+              "url": "{{base_url}}/categorias/{id}",
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nombre\": \"Nueva Categoría\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Eliminar una categoría",
+            "request": {
+              "url": "{{base_url}}/categorias/{id}",
+              "method": "DELETE"
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://127.0.0.1:8000/api",
+        "type": "string"
+      }
+    ],
+    "protocolProfileBehavior": {}
+  }

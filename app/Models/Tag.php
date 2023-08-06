@@ -15,4 +15,5 @@ class Tag extends Model
     {
         return $this->belongsToMany(Articulo::class, 'articulo_tags');
     }
+
 }

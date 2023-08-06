@@ -17,6 +17,8 @@ class CreateArticulosTable extends Migration
             $table->string('imagen_destacada')->nullable();
             $table->timestamp('fecha_publicacion')->nullable();
             $table->foreignId('usuario_id')->constrained('users');
+            $table->unsignedBigInteger('categoria_id')->nullable(); // Agregar esta línea
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('set null'); // Agregar esta línea
             $table->timestamps();
         });
     }

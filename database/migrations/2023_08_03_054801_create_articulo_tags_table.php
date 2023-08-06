@@ -9,7 +9,7 @@ class CreateArticuloTagsTable extends Migration
 {
     public function up()
     {
-        Schema::create('articulo_tags', function (Blueprint $table) {
+        Schema::create('articulo_tag', function (Blueprint $table) {
             $table->id();
             $table->foreignId('articulo_id')->constrained('articulos')->onDelete('cascade');
             $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
@@ -19,7 +19,7 @@ class CreateArticuloTagsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('articulo_tags');
+        Schema::dropIfExists('articulo_tag');
     }
 }
 

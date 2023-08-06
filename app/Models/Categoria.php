@@ -12,6 +12,6 @@ class Categoria extends Model
 
     public function articulos()
     {
-        return $this->belongsToMany(Articulo::class, 'articulo_categorias');
+        return $this->hasMany(Articulo::class);
     }
 }

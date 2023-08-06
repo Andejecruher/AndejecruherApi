@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Articulo extends Model
 {
     protected $fillable = [
-        'titulo', 'contenido', 'image_destacada', 'descripcion', 'fecha_publicacion', 'usuario_id'
+        'titulo', 'descripcion', 'contenido', 'imagen_destacada','fecha_publicacion', 'usuario_id', 'categoria_id'
     ];
 
     public function usuario()
@@ -20,8 +20,13 @@ class Articulo extends Model
         return $this->hasMany(Comentario::class);
     }
 
-    public function categorias()
+    public function categoria()
     {
-        return $this->belongsToMany(Categoria::class, 'articulo_categorias');
+        return $this->belongsTo(Categoria::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }
