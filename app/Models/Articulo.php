@@ -10,9 +10,9 @@ class Articulo extends Model
         'titulo', 'descripcion', 'contenido', 'imagen_destacada','fecha_publicacion', 'usuario_id', 'categoria_id'
     ];
 
-    public function usuario()
+    public function user()
     {
-        return $this->belongsTo(Usuario::class);
+        return $this->belongsTo(User::class);
     }
 
     public function comentarios()

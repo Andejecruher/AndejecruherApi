@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Articulo;
 use App\Models\Tag;
-use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ArticuloController extends Controller
 {
@@ -17,13 +18,13 @@ class ArticuloController extends Controller
 
     public function index()
     {
-        $articulos = Articulo::with('tags','comentarios', 'categoria')->latest()->get();
+        $articulos = Articulo::with('tags', 'comentarios', 'categoria', 'user')->paginate();
         return response()->json($articulos, 200);
     }
 
     public function show($id)
     {
-        $articulo = Articulo::with('tags','comentarios', 'categoria')->find($id);
+        $articulo = Articulo::with('tags', 'comentarios', 'categoria')->find($id);
         if ($articulo) {
             return response()->json($articulo, 200);
         } else {
