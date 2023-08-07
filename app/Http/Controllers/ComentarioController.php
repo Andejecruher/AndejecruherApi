@@ -15,7 +15,7 @@ class ComentarioController extends Controller
 
     public function index()
     {
-        $comentarios = Comentario::all();
+        $comentarios = Comentario::with('user')->paginate();
         return response()->json($comentarios, 200);
     }
 

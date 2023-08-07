@@ -7,7 +7,6 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ArticuloController extends Controller
 {
@@ -16,15 +15,28 @@ class ArticuloController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $articulos = Articulo::with('tags', 'comentarios', 'categoria', 'user')->paginate();
+        $query = Articulo::with('tags', 'comentarios', 'categoria', 'user');
+        // Aplicar filtros de búsqueda si se proporcionan en la consulta
+        if ($request->has('titulo')) {
+            $query->where('titulo', 'like', '%' . $request->input('titulo') . '%');
+        }
+        if ($request->has('descripcion')) {
+            $query->where('descripcion', 'like', '%' . $request->input('descripcion') . '%');
+        }
+        if ($request->has('contenido')) {
+            $query->where('contenido', 'like', '%' . $request->input('contenido') . '%');
+        }
+        $itemsPorPagina = $request->input('per_page', 10);
+        $paginaActual = $request->input('current_page', 1);
+        $articulos = $query->paginate($itemsPorPagina, ['*'], 'page', $paginaActual);
         return response()->json($articulos, 200);
     }
 
     public function show($id)
     {
-        $articulo = Articulo::with('tags', 'comentarios', 'categoria')->find($id);
+        $articulo = Articulo::with('tags', 'comentarios', 'categoria', 'user')->find($id);
         if ($articulo) {
             return response()->json($articulo, 200);
         } else {
@@ -47,14 +59,13 @@ class ArticuloController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => 'Datos inválidos', 'errors' => $validator->errors()], 422);
         }
-
         $articulo = Articulo::create([
             'titulo' => $request->titulo,
             'descripcion' => $request->descripcion,
             'contenido' => $request->contenido,
             'imagen_destacada' => $request->imagen_destacada,
             'fecha_publicacion' => now(), // '2021-08-03 05:48:01
-            'usuario_id' => auth()->user()->id,
+            'user_id' => auth()->user()->id,
             'categoria_id' => $request->categoria_id,
         ]);
 
