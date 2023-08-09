@@ -12,7 +12,7 @@ class CreateArticulosTable extends Migration
         Schema::create('articulos', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('descripcion');
+            $table->text('descripcion');
             $table->text('contenido');
             $table->string('imagen_destacada')->nullable();
             $table->timestamp('fecha_publicacion')->nullable();
