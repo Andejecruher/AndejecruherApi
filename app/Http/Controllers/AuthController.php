@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Mail\ForgotPassword;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -93,6 +96,24 @@ class AuthController extends Controller
             'refresh_token' => $refreshToken,
             'token_type' => 'Bearer',
         ], 200);
+    }
+
+    // Acción para enviar correo de recuperación de contraseña
+    public function forgotPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email', 'url' => 'required|string']);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        $token = app('auth.password')->createToken($user);
+
+
+        Mail::to($user->email)->send(new ForgotPassword($user, $token, $request->url));
+
+        return response()->json(['message' => 'Correo de recuperación de contraseña enviado']);
     }
 
     // Acción para cerrar sesión

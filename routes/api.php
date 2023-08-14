@@ -8,6 +8,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EmailsController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,4 +76,7 @@ Route::group(['prefix' => 'categorias'], function () {
 });
 
 Route::post('/enviar-mensaje',[EmailsController::class, 'enviarMensaje'])->name('enviar-mensaje')->middleware('guest');
-
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password')->middleware('guest');
