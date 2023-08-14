@@ -80,3 +80,4 @@ Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password')->middleware('guest');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('reset-password')->middleware('guest');

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Mail\ForgotPassword;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -101,19 +102,54 @@ class AuthController extends Controller
     // Acción para enviar correo de recuperación de contraseña
     public function forgotPassword(Request $request)
     {
-        $request->validate(['email' => 'required|email', 'url' => 'required|string']);
+        $request->validate(['correo' => 'required|email', 'url' => 'required|string']);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->correo)->first();
         if (!$user) {
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        $token = app('auth.password')->createToken($user);
+        // Generar un token único
+        $token = Str::random(60);
 
+        DB::table('password_reset_tokens')->insert([
+            'email' => $user->email,
+            'token' => $token,
+            'created_at' => now()
+        ]);
 
         Mail::to($user->email)->send(new ForgotPassword($user, $token, $request->url));
 
         return response()->json(['message' => 'Correo de recuperación de contraseña enviado']);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'correo' => 'required|email',
+            'token' => 'required',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        $user = User::where('email', $request->correo)->first();
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        $tokenData = DB::table('password_reset_tokens')
+            ->where('email', $request->correo)
+            ->where('token', $request->token)
+            ->first();
+
+        if (!$tokenData) {
+            return response()->json(['message' => 'Token inválido'], 400);
+        }
+
+        $user->update(['password' => Hash::make($request->password)]);
+        DB::table('password_reset_tokens')->where('email', $request->correo)->delete();
+
+        return response()->json(['message' => 'Contraseña restablecida con éxito']);
     }
 
     // Acción para cerrar sesión
